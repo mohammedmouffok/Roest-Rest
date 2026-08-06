@@ -1,27 +1,31 @@
 'use client';
-
+import axios from 'axios';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-
+    const router = useRouter();
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
         try {
+            // console.log('all good')
             const res = await axios.post(
                 "http://localhost:5000/api/auth/login",
                 {
-                    email,
-                    password,
+                    email: email,
+                    password: password
                 }
             );
-            console.log(res.data);
+            // console.log("hoi")
+            console.log(res);
             const { token, user } = res.data
 
             // set user info into localStorage
@@ -30,13 +34,13 @@ export default function LoginForm() {
 
             //redirect user based on role 'admin/client'
             if (user.role === 'admin') {
-                window.location.href = '/admin';
+                router.push('/admin');
             } else {
-                window.location.href = '/';
+                router.push('/client');
             }
-        } catch (error) {
-            console.error(error);
-            const errorMessage = error.response?.data?.message || error.message || 'login failed'
+        } catch (err) {
+            console.error(err);
+            const errorMessage = err.response?.data?.error || err.response?.data?.message || err.message || 'Login failed';
             setError(errorMessage)
         } finally {
             console.log("Request completed");
@@ -73,11 +77,16 @@ export default function LoginForm() {
                             required
                         />
                     </div>
+
+                    <Button type="submit" className="w-full">Sign In</Button>
+
                 </form>
             </CardContent>
             <CardFooter>
-
-                <Button type="submit" className="w-full">Sign In</Button>
+                <span className="text-sm text-gray-500">Don't have an account?</span>
+                <Button variant="outline">
+                    <Link href="/register">Register</Link>
+                </Button>
             </CardFooter>
         </Card>
     );
