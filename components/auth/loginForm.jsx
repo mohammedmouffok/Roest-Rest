@@ -22,14 +22,14 @@ export default function LoginForm() {
                 {
                     email: email,
                     password: password
-                }
+                },
+                { withCredentials: true }
             );
             // console.log("hoi")
             console.log(res);
-            const { token, user } = res.data
+            const { user } = res.data
 
             // set user info into localStorage
-            localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
 
             //redirect user based on role 'admin/client'
