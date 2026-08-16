@@ -23,8 +23,8 @@ export default function RegisterForm() {
                     password: password
                 }
             );
-            console.log(res)
-            console.log('account created please log in')
+            // console.log(res)
+            // console.log('account created please log in')
             window.location.href = '/login'
         } catch (error) {
             console.error(error);

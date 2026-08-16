@@ -1,5 +1,5 @@
 'use client';
-import axios from 'axios';
+import axios from '@/lib/axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
@@ -23,21 +23,17 @@ export default function LoginForm() {
                     email: email,
                     password: password
                 },
-                { withCredentials: true }
             );
             // console.log("hoi")
-            console.log(res);
+            // console.log(res);
             const { user } = res.data
 
             // set user info into localStorage
             localStorage.setItem('user', JSON.stringify(user));
 
-            //redirect user based on role 'admin/client'
-            if (user.role === 'admin') {
-                router.push('/admin');
-            } else {
-                router.push('/client');
-            }
+            //redirect user to '/dashboard'
+            router.push('/dashboard');
+
         } catch (err) {
             console.error(err);
             const errorMessage = err.response?.data?.error || err.response?.data?.message || err.message || 'Login failed';
