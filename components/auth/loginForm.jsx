@@ -24,8 +24,7 @@ export default function LoginForm() {
                     password: password
                 },
             );
-            // console.log("hoi")
-            // console.log(res);
+
             const { user } = res.data
 
             // set user info into localStorage
@@ -66,7 +65,7 @@ export default function LoginForm() {
                     <div>
                         <div className='flex justify-between '>
                             <label className="block text-sm font-medium mb-1">Password</label>
-                            <p className='hover:text-blue-500 '>forgot password</p>
+                            <Link href='/forgot-password'>forgot password</Link>
                         </div>
                         <input
                             type="password"

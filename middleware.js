@@ -7,15 +7,14 @@ export default function middelWare(req) {
         return NextResponse.redirect(new URL('/login', req.url))
     }
 
-    if (token && pathname === '/login') {
-        return NextResponse.redirect(new URL('/dashboard', req.url))
-    }
-    if (token && pathname === '/register') {
+
+    const authRoute = ['/login', '/register', '/forgot-password', '/reset-password'];
+    if (token && authRoute.some(route => pathname.startsWith(route))) {
         return NextResponse.redirect(new URL('/dashboard', req.url))
     }
     return NextResponse.next()
 
 }
 export const config = {
-    matcher: ['/dashboard', '/login', '/register']
+    matcher: ['/dashboard', '/login', '/register', '/forgot-password', '/reset-password']
 }
