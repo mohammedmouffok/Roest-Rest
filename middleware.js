@@ -16,5 +16,5 @@ export default function middelWare(req) {
 
 }
 export const config = {
-    matcher: ['/dashboard', '/login', '/register', '/forgot-password', '/reset-password']
+    matcher: ['/dashboard/:path*', '/login', '/register', '/forgot-password', '/reset-password']
 }
