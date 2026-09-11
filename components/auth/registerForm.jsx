@@ -1,5 +1,5 @@
 'use client';
-import axios from 'axios';
+import axios from '@/lib/axios';
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,20 +15,21 @@ export default function RegisterForm() {
         setError('');
 
         try {
-            const res = await axios.post(
+            console.log("rana mlah hna")
+            await axios.post(
                 "http://localhost:5000/api/auth/register",
                 {
-                    name: name,
-                    email: email,
-                    password: password
+                    name,
+                    email,
+                    password,
                 }
             );
-            // console.log(res)
-            // console.log('account created please log in')
-            window.location.href = '/login'
+
+
         } catch (error) {
             console.error(error);
-            const errorMessage = error.response?.data?.message || error.message || 'login failed'
+            console.log(error.message)
+            const errorMessage = error.response?.data?.message || error.message || 'register failed'
             setError(errorMessage)
         } finally {
             console.log("Request completed");
