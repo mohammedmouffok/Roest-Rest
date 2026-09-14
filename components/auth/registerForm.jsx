@@ -1,39 +1,28 @@
 'use client';
 import axios from '@/lib/axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import useAuthStore from '@/stores/useAuthStore';
 
 export default function RegisterForm() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const { isLoading, error, clearError, register } = useAuthStore()
+
+    useEffect(() => {
+        clearError()
+    }, [clearError])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
 
-        try {
-            console.log("rana mlah hna")
-            await axios.post(
-                "http://localhost:5000/api/auth/register",
-                {
-                    name,
-                    email,
-                    password,
-                }
-            );
-
-
-        } catch (error) {
-            console.error(error);
-            console.log(error.message)
-            const errorMessage = error.response?.data?.message || error.message || 'register failed'
-            setError(errorMessage)
-        } finally {
-            console.log("Request completed");
+        const res = await register(name, email, password)
+        if (res.seccess) {
+            console.log("request complete")
         }
+
     };
 
 
@@ -76,7 +65,9 @@ export default function RegisterForm() {
                             required
                         />
                     </div>
-                    <Button type="submit" className="w-full">Sign up</Button>
+                    <Button type="submit" className="w-full">
+                        {isLoading ? 'Signing up...' : 'Sign up'}
+                    </Button>
                 </form>
             </CardContent>
 
