@@ -2,12 +2,14 @@
 import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 import useAuthStore from '@/stores/useAuthStore';
 
 export default function RegisterForm() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const router = useRouter()
     const { isLoading, error, clearError, register } = useAuthStore()
 
     useEffect(() => {
@@ -19,6 +21,7 @@ export default function RegisterForm() {
 
         const res = await register(name, email, password)
         if (res.seccess) {
+            router.push('/account')
             console.log("request complete")
         }
 

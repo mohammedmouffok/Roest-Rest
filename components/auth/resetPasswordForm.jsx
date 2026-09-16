@@ -1,8 +1,8 @@
 "use client"
-import axios from '@/lib/axios'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import useAuthStore from '@/stores/useAuthStore';
 import { Card, CardContent, CardHeader, CardDescription, CardFooter, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -12,7 +12,7 @@ export default function ResetPasswordForm() {
     const searchParams = useSearchParams();
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
-    const [loading, setLoading] = useState(false)
+    const { resetPassword, error, clearError, isLoading } = useAuthStore()
     const [query, setQuery] = useState({
         id: null,
         token: null
@@ -35,23 +35,13 @@ export default function ResetPasswordForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const res = await resetPassword(query.id, query.token, password)
+        if (res.seccess) {
 
-        try {
-            setLoading(true)
-            // 2. Send the `id` and `token` in the backend endpoint's query string
-            const res = await axios.post(`http://localhost:5000/api/auth/resetPassword?id=${query.id}&token=${query.token}`,
-                {
-                    password: password,
-                }
-            )
-            console.log(res.data.message)
             router.push('/login')
-        } catch (err) {
-            console.error(err)
-            setMessage('Server error. Please try again later.');
-        } finally {
-            setLoading(false)
         }
+
+
     };
 
     return (
@@ -73,16 +63,16 @@ export default function ResetPasswordForm() {
                             required
                         />
                     </div>
-                    <p>{message}</p>
-                    {/* {message.text && (
+                    {/* <p>{message}</p> */}
+                    {message.text && (
                         <p className={`text-sm p-2 rounded ${message.isError ? "bg-red-500/10 text-red-500" : "bg-green-500/10 text-green-500"}`}>
                             {message.text}
                         </p>
-                    )} */}
+                    )}
                 </CardContent>
                 <CardFooter className="flex flex-col gap-4 ">
                     <Button type="submit" className="w-full bg-amber-500 dark:bg-sky-500 hover:bg-sky-600 text-white" disabled={loading}>
-                        {loading ? "Reseting..." : "Reset Password"}
+                        {isLoading ? "Reseting..." : "Reset Password"}
                     </Button>
                 </CardFooter>
             </form>

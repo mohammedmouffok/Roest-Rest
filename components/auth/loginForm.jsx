@@ -1,45 +1,33 @@
 'use client';
-import axios from '@/lib/axios';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import useAuthStore from '@/stores/useAuthStore';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+
+//this for routing module 
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const router = useRouter();
+    const { error, clearError, isLoading, login } = useAuthStore()
+
+    useEffect(() => {
+        clearError()
+    }, [clearError])
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
 
-        try {
-            // console.log('all good')
-            const res = await axios.post(
-                "http://localhost:5000/api/auth/login",
-                {
-                    email: email,
-                    password: password
-                },
-            );
+        const res = await login(email, password)
 
-            const { user } = res.data
-
-            // set user info into localStorage
-            localStorage.setItem('user', JSON.stringify(user));
-
-            //redirect user to '/dashboard'
+        if (res.seccess) {
+            console.log("request complete")
             router.push('/dashboard');
 
-        } catch (err) {
-            console.error(err);
-            const errorMessage = err.response?.data?.error || err.response?.data?.message || err.message || 'Login failed';
-            setError(errorMessage)
-        } finally {
-            console.log("Request completed");
         }
+
     };
 
 
@@ -76,14 +64,16 @@ export default function LoginForm() {
                         />
                     </div>
 
-                    <Button type="submit" className="w-full">Sign In</Button>
+                    <Button type="submit" className="w-full">
+                        {isLoading ? "Sigining in..." : "Sign in"}
+                    </Button>
 
                 </form>
             </CardContent>
             <CardFooter>
                 <span className="text-sm text-gray-500">Don't have an account?</span>
                 <Button variant="outline">
-                    <Link href="/register">Register</Link>
+                    <Link href="/register">Sign up</Link>
                 </Button>
             </CardFooter>
         </Card>

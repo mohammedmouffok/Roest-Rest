@@ -1,25 +1,22 @@
 'use client'
 import { Button } from "../ui/button"
 import { useRouter } from "next/navigation"
-import axios from "@/lib/axios"
+import useAuthStore from "@/stores/useAuthStore"
 
 export default function LogoutButton() {
     const router = useRouter()
+    const { isLoading, logout } = useAuthStore()
     async function onLogout() {
-        try {
+        const res = await logout()
 
-            await axios.post("http://localhost:5000/api/auth/logout")
-
-            localStorage.removeItem('user')
-
+        if (res.seccess) {
             router.push('/login')
-        } catch (err) {
-            console.error('logout failed :', err)
+            console.log("all good!")
         }
     }
     return (
         <Button onClick={onLogout}>
-            SIGN OUT
+            {isLoading ? "Signing out..." : "Sign out"}
         </Button>
     )
 }
