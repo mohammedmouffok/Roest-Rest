@@ -22,7 +22,7 @@ const useAuthStore = create((set) => {
                     }
                 );
 
-                set({ currentUser: res.data, isLoading: false, messages: res.message })
+                set({ currentUser: res.data, isLoading: false, messages: res.data.message })
                 return { seccess: true }
 
 
@@ -79,14 +79,14 @@ const useAuthStore = create((set) => {
                 return { seccess: false }
             }
         },
-        requestPassword: async () => {
+        requestPassword: async (email) => {
             try {
                 set({ isLoading: true })
                 const res = await axios.post('http://localhost:5000/api/auth/requestPasswordReset', {
                     email: email,
                 })
-                const data = await res.status
-                console.log(data)
+
+                console.log(res)
                 set({ isLoading: false, messages: res.data.message })
                 return { seccess: true }
 
@@ -121,7 +121,7 @@ const useAuthStore = create((set) => {
             try {
                 set({ isLoading: true })
                 const res = await axios.get(`http://localhost:5000/api/auth/verifyEmail?token=${token}`);
-                const data = await res.data
+                const data = res.data
                 console.log(data)
                 set({ isLoading: false })
                 return { seccess: true }

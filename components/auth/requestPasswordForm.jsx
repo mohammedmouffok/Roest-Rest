@@ -13,7 +13,7 @@ export default function RequestPasswordForm() {
     const [email, setEmail] = useState('')
     const [message, setMessage] = useState('')
     const router = useRouter()
-    const { requestpassword, isLoading, error, clearError } = useAuthStore()
+    const { requestPassword, isLoading, error, clearError } = useAuthStore()
 
     useEffect(() => {
         clearError()
@@ -22,19 +22,17 @@ export default function RequestPasswordForm() {
     // send the reset request link post to the backend
     const sendRequest = async (e) => {
         e.preventDefault()
-        const res = await requestpassword()
+        const res = await requestPassword(email)
+
         if (res.seccess) {
-
-            if (data === 200) {
-                setMessage(' reset link sent with successfull.');
-            } else {
-                setMessage(error);
-            }
-
-            router.push('/account')
+            setMessage(' reset link sent with successfull.');
+        } else {
+            setMessage(error);
         }
 
+        router.push('/account')
     }
+
 
 
 

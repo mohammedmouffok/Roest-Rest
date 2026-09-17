@@ -1,6 +1,9 @@
+"use client"
+
 import useAuthStore from "@/stores/useAuthStore"
 
 export default function account() {
+
     const { messages } = useAuthStore()
     return (
         <div>

@@ -71,7 +71,7 @@ export default function ResetPasswordForm() {
                     )}
                 </CardContent>
                 <CardFooter className="flex flex-col gap-4 ">
-                    <Button type="submit" className="w-full bg-amber-500 dark:bg-sky-500 hover:bg-sky-600 text-white" disabled={loading}>
+                    <Button type="submit" className="w-full bg-amber-500 dark:bg-sky-500 hover:bg-sky-600 text-white" disabled={isLoading}>
                         {isLoading ? "Reseting..." : "Reset Password"}
                     </Button>
                 </CardFooter>

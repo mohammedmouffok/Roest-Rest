@@ -27,10 +27,10 @@ export default function VerifyEmailComponent() {
             const res = await verifyEmail(token)
             if (res.seccess) {
                 setStatus('success');
-                setMessage(data.message || 'Email verified successfully!');
+                setMessage('Email verified successfully!');
             } else {
                 setStatus('error');
-                setMessage(data.message || 'Verification failed.');
+                setMessage(error || 'Verification failed.');
             }
 
         };
